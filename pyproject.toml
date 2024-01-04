@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "dataengineer-toolbox"
+version = "0.1.0"
+description = ""
+authors = ["Raphael MANSUY <raphael.mansuy.partner@decathlon.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+asyncio = "^3.4.3"
+backoff = "^2.2.1"
+logging = "^0.4.9.6"
+aiobotocore = "^2.9.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
