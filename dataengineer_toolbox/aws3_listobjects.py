@@ -95,8 +95,8 @@ async def retrieve_files_queue(bucket_name, prefix: str, n: int, s3_client: obje
     Raises:
         Exception: If there is an error retrieving files from the bucket.
     """
-    queue = Queue()
-    await queue.put((prefix, 0))
+    queue = asyncio.Queue()  # Fixed queue initialization
+    queue.put_nowait((prefix, 0))
 
     async def worker(i: int) -> None:
         while True:
@@ -123,10 +123,10 @@ async def retrieve_files_queue(bucket_name, prefix: str, n: int, s3_client: obje
 
     workers = [asyncio.create_task(worker(i)) for i in range(n)]
 
-    # Wait for the queue to be empty and then send a signal to workers to stop
     await queue.join()
     for _ in workers:
         await queue.put((None, 0))  # Sentinel values to stop workers
+
 
     # Wait for all worker tasks to complete
     await asyncio.gather(*workers)
@@ -195,7 +195,7 @@ async def main():
     Returns:
     This function does not return any value.
     """
-    s3_path = 's3://test/transactions'
+    s3_path = 's3://prd-dct-dlk-silver/payment/onepay_v2/transactions_delta/'
     n = 10  # Degree of parallelism
     print(f"Retrieving files from {s3_path} with {n} tasks")
     await retrieve_s3_files(s3_path, n)
