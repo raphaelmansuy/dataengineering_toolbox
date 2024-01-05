@@ -131,8 +131,6 @@ async def retrieve_files_queue(bucket_name, prefix: str, n: int, s3_client: obje
     # Wait for all worker tasks to complete
     await asyncio.gather(*workers)
 
-    queue = Queue()
-    queue.put_nowait((prefix, 0))
 
 
 async def retrieve_s3_files(s3_path: str, n: int) -> None:
